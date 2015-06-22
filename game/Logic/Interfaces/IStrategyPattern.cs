@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Logic.Interfaces
 {
-   public interface IPlate:IState
+    public interface IStrategyPattern
     {
-         IPosition Coordinates { get; }
-
-         char Body { get; set; }
+        char[,] StrategyPattern { get; }
     }
 }

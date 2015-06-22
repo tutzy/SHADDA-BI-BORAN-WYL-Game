@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeelTheField", "FeelTheField\FeelTheField.csproj", "{88B45A7E-C117-4562-836A-B82C9FF489E6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "Logic\Logic.csproj", "{2FA29B3E-1649-4C8F-94F8-2FF8F3EC1185}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wpf_client", "Wpf_client\Wpf_client.csproj", "{C21E5333-FF04-4AE0-A762-D92452E23102}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{2FA29B3E-1649-4C8F-94F8-2FF8F3EC1185}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FA29B3E-1649-4C8F-94F8-2FF8F3EC1185}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FA29B3E-1649-4C8F-94F8-2FF8F3EC1185}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C21E5333-FF04-4AE0-A762-D92452E23102}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C21E5333-FF04-4AE0-A762-D92452E23102}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C21E5333-FF04-4AE0-A762-D92452E23102}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C21E5333-FF04-4AE0-A762-D92452E23102}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

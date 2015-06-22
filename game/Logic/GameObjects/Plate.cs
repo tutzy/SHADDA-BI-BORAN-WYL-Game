@@ -9,16 +9,48 @@ using Logic.Interfaces;
 
 namespace Logic.GameObjects
 {
-    public abstract class Plate : GameObject, IPlate
+    public abstract class Plate : IPlate
     {
-        public State ObjeState { get; set; }
-        public IPosition Coordinates { get; set; }
+        protected const char DEFAULT_CLOSED_PLATE = 'X';
+        protected const char DEFAULT_OPENED_PLATE = '@';
+        private char plate;
 
-        public IGameObject GetGameObject()
+        public Plate(IPosition position)
         {
-          throw new NotImplementedException();
+            this.ObjeState = State.Closed;
+            this.Coordinates = position;
         }
-        
-        //[modifiers: public, private] [declaringType static] [void, int, IRenredable] [Name] [Parameters]
+
+        public State ObjeState { get; set; }
+        public IPosition Coordinates { get; private set; }
+
+        public char Body
+        {
+            get
+            {
+                if (this.ObjeState == Enumerations.State.Closed)
+                {
+                    return DEFAULT_CLOSED_PLATE;
+                }
+
+                return this.plate == ' ' ? DEFAULT_OPENED_PLATE : this.plate;
+            }
+            set
+            {
+                this.plate = value;
+            }
+        }
+
+        public void ChangeState() 
+        {
+            if (this.ObjeState == State.Closed)
+            {
+                this.ObjeState = State.Open;
+            }
+            else
+            {
+                this.ObjeState = State.Closed;
+            }
+        }
     }
 }

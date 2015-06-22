@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Logic.Interfaces
 {
-    public interface IGameObject : IPrintable
+    public interface IGameObject
     {
 
     }

@@ -39,22 +39,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine\Engine.cs" />
     <Compile Include="Enumerations\State.cs" />
     <Compile Include="GameObjects\Field.cs" />
+    <Compile Include="GameObjects\GameField.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
+    <Compile Include="GameObjects\GamePlate.cs" />
     <Compile Include="GameObjects\Plate.cs" />
+    <Compile Include="ClickPatterns\DefaultStrategy.cs" />
+    <Compile Include="Helpers\Position.cs" />
+    <Compile Include="Interfaces\IField.cs" />
     <Compile Include="Interfaces\IGameObject.cs" />
     <Compile Include="Interfaces\IPlate.cs" />
     <Compile Include="Interfaces\IPosition.cs" />
     <Compile Include="Interfaces\IPrintable.cs" />
     <Compile Include="Interfaces\IPrinter.cs" />
     <Compile Include="Interfaces\IState.cs" />
+    <Compile Include="Interfaces\IStrategyPattern.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ClickPatterns\" />
-    <Folder Include="Engine\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

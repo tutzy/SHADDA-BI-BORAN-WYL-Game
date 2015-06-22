@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Logic.Interfaces
 {
-   public interface IPlate:IState
+    public interface IField
     {
-         IPosition Coordinates { get; }
-
-         char Body { get; set; }
+        IPlate[,] Matrix { get; set; }
     }
 }

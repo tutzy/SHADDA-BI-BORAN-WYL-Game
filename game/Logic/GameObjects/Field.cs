@@ -7,7 +7,13 @@ using Logic.Interfaces;
 
 namespace Logic.GameObjects
 {
-    public abstract class Field:GameObject,IGameObject
+    public abstract class Field : IField
     {
+        public Field(int rows, int cols)
+        {
+            this.Matrix = new GamePlate[rows, cols];
+        }
+
+        public IPlate[,] Matrix { get; set; }
     }
 }
