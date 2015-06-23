@@ -25,7 +25,12 @@ namespace Logic.Engine
         {
             this.Field = new GameField(DEFAULT_ROWS, DEFAULT_COLS);
             this.strategy = InitDefaultStrategy();
-            //TODO: init default strategy
+        }
+
+        public void ResetGame()
+        {
+            this.Field = new GameField(this.rows, this.cols);
+            this.ConfigureGameFieldSize(rows, cols);
         }
 
         private IStrategyPattern InitDefaultStrategy()
@@ -82,7 +87,7 @@ namespace Logic.Engine
 
         public void ConfigureStrategy(IStrategyPattern strategy) 
         {
-            //TODO: implement different strategy
+            this.strategy = strategy;
         }
 
         public IField PlayWithPosition(IPosition position)
@@ -125,7 +130,28 @@ namespace Logic.Engine
                 }
             }
 
+            CheckIfMatrixIsFull();
             return this.Field;
+        }
+
+        private void CheckIfMatrixIsFull()
+        {
+            var tilesCount = 0;
+            for (int r = 0; r < rows; r++)
+            {
+                for (int c = 0; c < cols; c++)
+                {
+                    if (this.Field.Matrix[r, c].ObjeState == Enumerations.State.Open)
+                    {
+                        tilesCount++;
+                    }
+                }
+            }
+
+            if (tilesCount == rows * cols)
+            {
+                this.Field.MatrixIsFull = true;
+            }
         }
 
         private bool isValidStrategy(IStrategyPattern strategy)

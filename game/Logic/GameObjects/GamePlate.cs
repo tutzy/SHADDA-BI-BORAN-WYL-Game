@@ -12,7 +12,7 @@ namespace Logic.GameObjects
         public GamePlate(IPosition position) 
             :base(position)
         {
-
+            this.ObjeState = Enumerations.State.Closed;
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using Logic.Engine;
+﻿using Logic.ClickPatterns;
+using Logic.Engine;
 using Logic.Enumerations;
+using Logic.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -14,156 +17,129 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf_client.Config;
 using Wpf_client.Helpers;
 
 namespace Wpf_client
 {
     public partial class MainWindow : Window
     {
-        private const string SEPARATOR = "I";
-        private const string CLOSED_SYMBOL = "X";
-        private const string OPEN_SYMBOL = "@";
-        private readonly Brush OPEN_COLOR = Brushes.LightGreen;
-        private readonly Brush CLOSED_COLOR = Brushes.LightBlue;
+        private Configuration configuration;
         private int rows = 3;
         private int cols = 3;
-        private double phisHight;
-        private double phisWidth;
         private Engine engine;
 
         public MainWindow()
         {
             InitializeComponent(); //returns nothing so the grids actual size is still 0 so we need to set it up manualy
+            this.Hide();
+            SetGameFieldSize();
+        }
 
+        private void SetGameFieldSize()
+        {
+            var gff = new GameConfigForm();
+            gff.OnFieldsSet += OnFieldsSetHandler;
+            gff.BringToFront();
+            gff.Show();
+        }
+
+        private void OnFieldsSetHandler(Object sender, EventArgs ea)
+        {
+            var configForm = (GameConfigForm)sender;
+            this.rows = configForm.Rows;
+            this.cols = configForm.Cols;
+
+            this.Show();
+            SetUpGameEngine();
+            SetUpGridAndWindow();
+        }
+
+        private void SetUpGridAndWindow()
+        {
+            this.configuration = Configuration.Instance;
+            this.configuration.SetContext(this);
+            this.configuration.SetUpGrid(rows, cols, HandleMouseDown);
+            this.configuration.FillGridWithButtons();
+        }
+
+        private void SetUpGameEngine()
+        {
             this.engine = Engine.Instance;
             this.engine.ConfigureStrategy(null);
             this.engine.ConfigureGameFieldSize(rows, cols);
-
-            SetPhisicalMonitorSize(); //set windows size and global width and hight
-            //read user rows, cols
-
-            SetUpGrid(rows, cols);
-            FillGridWithButtons();
-        }
-        private void SetPhisicalMonitorSize()
-        {
-            phisHight = System.Windows.SystemParameters.PrimaryScreenHeight * 0.60;
-            phisWidth = System.Windows.SystemParameters.PrimaryScreenWidth * 0.60;
-            this.Width = phisWidth * (phisHight + cols) / (phisWidth - cols);
-            this.Height = phisHight + rows * rows / 2.7 + phisWidth / phisHight; //no idea how this happened ... just works for now
-        }
-
-        private void FillGridWithButtons()
-        {
-            for (int row = 0; row < rows; row++)
-            {
-                for (int col = 0; col < cols; col++)
-                {
-                    var b = new Button();
-                    b.Content = CLOSED_SYMBOL;
-                    b.Background = Brushes.LightBlue;
-                    b.Name = SEPARATOR + row.ToString() + SEPARATOR + col.ToString();
-                    this.main_grid.Children.Add(b);
-
-                    Grid.SetRow(b, row);
-                    Grid.SetColumn(b, col);
-                }
-            }
-        }
-
-        private void SetUpGrid(int rows, int cols)
-        {
-            SetUpSizeOfGrid();
-            SetUpRowColDefinitions(rows, cols);
-            SetUpMouseEventListener();
-        }
-
-        private void SetUpMouseEventListener()
-        {
-            var mouseClickHandlerDelegate = new RoutedEventHandler(HandleMouseDown);
-            this.main_grid.AddHandler(Grid.MouseDownEvent, mouseClickHandlerDelegate, true);
-        }
-
-        private void SetUpRowColDefinitions(int rows, int cols)
-        {
-            var rowDefinitionsList = new List<RowDefinition>();
-            var colDefinitionsList = new List<ColumnDefinition>();
-
-            //add row definitions
-            for (int row = 0; row < rows; row++)
-            {
-                var rd = new RowDefinition();
-                GridLength height = new GridLength(this.main_grid.ActualHeight / rows);
-                rd.Height = height;
-                rowDefinitionsList.Add(rd);
-                this.main_grid.RowDefinitions.Add(rd);
-            }
-
-            //add col definitions
-            for (int col = 0; col < cols; col++)
-            {
-                var cd = new ColumnDefinition();
-                GridLength width = new GridLength(this.main_grid.ActualHeight / cols);
-                cd.Width = width;
-                colDefinitionsList.Add(cd);
-                this.main_grid.ColumnDefinitions.Add(cd);
-            }
-        }
-
-        private void SetUpSizeOfGrid()
-        {
-            this.main_grid.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            this.main_grid.Arrange(new Rect(0, 0, phisWidth, phisHight));
+            this.engine.ConfigureStrategy(new DefaultStrategy());
         }
 
         private void HandleMouseDown(Object sender, RoutedEventArgs args)
         {
+            //get clicked button
             var b = (Button)args.Source;
             var name = b.Name;
-            var tag = b.Tag; //use tag(or some other prop) to save state
 
-            var rowCol = name.Split(SEPARATOR.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-            var row = int.Parse(rowCol[0]);
-            var col = int.Parse(rowCol[1]);
+            var currentPosition = GetClickedPosition(name);
 
-            var currentPosition = new Pos(row, col);
+            //ask engine what happens after clicked position
+            var updatedMatrix = this.engine.PlayWithPosition(currentPosition);
 
-            var res = this.engine.PlayWithPosition(currentPosition);
-            //send coordinates as Position
-            //recieve new state of matrix
-            //update buttons acordingly
+            UpdateFieldAfterClick(updatedMatrix);
 
+            HandleGameWon(updatedMatrix);
+        }
+
+        private void HandleGameWon(IField updatedMatrix)
+        {
+            if (updatedMatrix.MatrixIsFull)
+            {
+                CreatePopUpWithText("You won");
+                UpdateFieldAfterClick(this.engine.Field);
+            }
+        }
+
+        private void CreatePopUpWithText(string text)
+        {
+            var playAgainin = "do you want to play again?";
+            MessageBoxResult result = MessageBox.Show(playAgainin, text, MessageBoxButton.YesNo, MessageBoxImage.Question);
+            var hasClickedYes = result.HasFlag(MessageBoxResult.Yes);
+            if (result == MessageBoxResult.Yes)
+            {
+                this.engine.ResetGame();
+            }
+            else
+            {
+                this.Close();
+            }
+        }
+
+        private void UpdateFieldAfterClick(Logic.Interfaces.IField res)
+        {
             for (int r = 0; r < rows; r++)
             {
                 for (int c = 0; c < cols; c++)
                 {
                     var currentTile = res.Matrix[r, c];
-                    //var cb = (Button)this.main_grid.FindName();
-                    var cb = FindVisualChildByName<Button>(this.main_grid, string.Format("{0}{1}{0}{2}", SEPARATOR, currentTile.Coordinates.Row, currentTile.Coordinates.Col));
+                    var cb = FindVisualChildByName<Button>(this.main_grid, string.Format("{0}{1}{0}{2}", Configuration.SEPARATOR, currentTile.Coordinates.Row, currentTile.Coordinates.Col));
                     if (currentTile.ObjeState == State.Closed)
                     {
-                        cb.Background = CLOSED_COLOR;
-                        cb.Content = CLOSED_SYMBOL;
+                        cb.Background = Configuration.CLOSED_COLOR;
+                        cb.Content = Configuration.CLOSED_SYMBOL;
                     }
                     else
                     {
-                        cb.Background = OPEN_COLOR;
-                        cb.Content = OPEN_SYMBOL;
+                        cb.Background = Configuration.OPEN_COLOR;
+                        cb.Content = Configuration.OPEN_SYMBOL;
                     }
                 }
             }
+        }
 
-            //testing
-            //if (b.Content.Equals(CLOSED_SYMBOL))
-            //{
-            //    b.Background = OPEN_COLOR;
-            //    b.Content = OPEN_SYMBOL;
-            //}
-            //else if (b.Content.Equals(OPEN_SYMBOL))
-            //{
-            //    b.Background = CLOSED_COLOR;
-            //    b.Content = CLOSED_SYMBOL;
-            //}
+        private static Pos GetClickedPosition(string name)
+        {
+            var rowCol = name.Split(Configuration.SEPARATOR.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            var row = int.Parse(rowCol[0]);
+            var col = int.Parse(rowCol[1]);
+            var currentPosition = new Pos(row, col);
+            return currentPosition;
         }
 
         public static T FindVisualChildByName<T>(DependencyObject parent, string name) where T : DependencyObject

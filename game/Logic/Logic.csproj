@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClickPatterns\WinStrategy.cs" />
     <Compile Include="Engine\Engine.cs" />
     <Compile Include="Enumerations\State.cs" />
     <Compile Include="GameObjects\Field.cs" />

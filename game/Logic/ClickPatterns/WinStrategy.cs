@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Logic.ClickPatterns
 {
-    public class DefaultStrategy : IStrategyPattern
+    public class WinStrategy : IStrategyPattern
     {
         public char[,] StrategyPattern
         {
             get 
             {
                 return new char[3,3] {
-                                        {' ', 'X', ' '},
                                         {'X', 'X', 'X'},
-                                        {' ', 'X', ' '},
+                                        {'X', 'X', 'X'},
+                                        {'X', 'X', 'X'},
                                     };
             }
         }

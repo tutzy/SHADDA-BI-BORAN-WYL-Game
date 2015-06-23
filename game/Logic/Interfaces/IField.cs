@@ -9,5 +9,7 @@ namespace Logic.Interfaces
     public interface IField
     {
         IPlate[,] Matrix { get; set; }
+
+        bool MatrixIsFull { get; set; }
     }
 }
