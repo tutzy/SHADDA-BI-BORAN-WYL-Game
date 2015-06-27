@@ -16,9 +16,9 @@ namespace Wpf_client.Config
 
         public static string SEPARATOR = "I";
         public static string CLOSED_SYMBOL = "X";
-        public static string OPEN_SYMBOL = "@";
+        public static string OPEN_SYMBOL = "$";
         public static Brush OPEN_COLOR = Brushes.LightGreen;
-        public static Brush CLOSED_COLOR = Brushes.LightBlue;
+        public static Brush CLOSED_COLOR = Brushes.Red;
         private MainWindow mainWindowContext;
         private Grid mainGrid;
         private double phisHight;
@@ -68,7 +68,7 @@ namespace Wpf_client.Config
                 {
                     var b = new Button();
                     b.Content = CLOSED_SYMBOL;
-                    b.Background = Brushes.LightBlue;
+                    b.Background = Brushes.Red;
                     b.Name = SEPARATOR + row.ToString() + SEPARATOR + col.ToString();
                     this.mainGrid.Children.Add(b);
 
