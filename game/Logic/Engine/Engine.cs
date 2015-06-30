@@ -4,6 +4,7 @@ using Logic.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,6 +19,9 @@ namespace Logic.Engine
 
         private int rows;
         private int cols;
+
+        
+
         private IField field;
         private IStrategyPattern strategy;
 
