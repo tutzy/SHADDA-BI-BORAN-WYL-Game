@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FeelTheField
 {
-    class DrowConsole
+    class DrawConsole
     {
         public static void PrintField(char[,] field)
         {

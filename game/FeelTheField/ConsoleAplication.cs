@@ -16,13 +16,26 @@ namespace FeelTheField
         {
             char ch1 = 'X';
             char ch2 = '$';
+
             int row = int.Parse(Console.ReadLine());
             int col = int.Parse(Console.ReadLine());
+
             char[,] matrix = new char[row, col];
+            
+
+            DrawConsole.FillWithChar(matrix, ch1);
+            DrawConsole.PrintField(matrix);
+
+            var engine = Engine.Instance;
+            engine.ConfigureGameFieldSize(row, col);
+
+            var gameField = engine.Field; // The Matrix
+
+            DrawConsole.FillWithChar(matrix,'X');
+
+            DrawConsole.PrintField(matrix);
 
 
-            DrowConsole.FillWithChar(matrix, ch1);
-            DrowConsole.PrintField(matrix);
         }
     }
 }
