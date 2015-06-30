@@ -4,9 +4,11 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Logic.ClickPatterns;
 using Logic.Engine;
 using Logic.Enumerations;
 using Logic.GameObjects;
+using Logic.Interfaces;
 
 
 namespace FeelTheField
@@ -27,32 +29,53 @@ namespace FeelTheField
             var engine = Engine.Instance;
             engine.ConfigureGameFieldSize(row, col);
 
-            var gameField = engine.Field; // The Matrix
+            DrawConsole.FillWithChar(matrix, 'X');
 
-            DrawConsole.FillWithChar(matrix,'X');
+            UpdateMatixAndPrintIt(engine, row, col, matrix, open, closed);
+        }
 
-            for (int i = 0; i < row; i++)
+        private static void UpdateMatixAndPrintIt(Engine engine, int row, int col, char[,] matrix, char open, char closed)
+        {
+
+            while (true)
             {
-                for (int j = 0; j < col; j++)
+                var gameField = engine.Field; // The Matrix
+                if (gameField.MatrixIsFull)
                 {
-                    if (gameField.Matrix[i, j].ObjeState == State.Open)
+                    Console.Clear();
+                    Console.WriteLine("Congrats you won!");
+                    break;
+                }
+
+
+                for (int i = 0; i < row; i++)
+                {
+                    for (int j = 0; j < col; j++)
                     {
-                        matrix[i, j] = open;
-                        //matrix[i, j] = gameField.Matrix[i, j].Body;
-                    }
-                    else
-                    {
-                        matrix[i, j] = closed;
-                        //matrix[i, j] = gameField.Matrix[i, j].Body;
+                        if (gameField.Matrix[i, j].ObjeState == State.Open)
+                        {
+                            matrix[i, j] = open;
+                            //matrix[i, j] = gameField.Matrix[i, j].Body;
+                        }
+                        else
+                        {
+                            matrix[i, j] = closed;
+                            //matrix[i, j] = gameField.Matrix[i, j].Body;
+                        }
                     }
                 }
+
+                DrawConsole.PrintField(matrix);
+
+                int y = int.Parse(Console.ReadLine());
+                int x = int.Parse(Console.ReadLine());
+
+                var newPosition = new Position(y, x);
+
+                engine.PlayWithPosition(newPosition);
+
+                Console.Clear();
             }
-
-            DrawConsole.PrintField(matrix);
-
-           
-
-
         }
     }
 }
