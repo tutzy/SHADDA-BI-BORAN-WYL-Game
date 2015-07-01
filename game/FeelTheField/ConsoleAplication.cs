@@ -67,6 +67,7 @@ namespace FeelTheField
 
                 DrawConsole.PrintField(matrix);
 
+                
                 int y = int.Parse(Console.ReadLine());
                 int x = int.Parse(Console.ReadLine());
 

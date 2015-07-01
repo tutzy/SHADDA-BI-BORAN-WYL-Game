@@ -98,12 +98,14 @@ namespace Logic.Engine
         {
             if (!isValidPosition(position))
             {
-                //TODO: implement what happens when position isn't valid
+                
+                return this.Field;
             }
 
             if (!isValidStrategy(this.strategy))
             {
-                //TODO: implement what happens when strategy isn't valid
+                
+                return this.Field;
             }
 
             var strategyRows = this.strategy.StrategyPattern.GetLength(0);
@@ -173,7 +175,12 @@ namespace Logic.Engine
 
         private bool isValidPosition(IPosition position)
         {
-            //TODO: implement validation of position
+            if (position.Row > this.field.Matrix.GetLength(0) )
+            {
+                Console.WriteLine("Invalid coordinates!!!");
+                return false;
+
+            }
             return true;
         }
     }
