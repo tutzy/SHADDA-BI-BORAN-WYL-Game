@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleAplication.cs" />
-    <Compile Include="DrawConsole.cs" />
+    <Compile Include="PrintTheField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -29,7 +29,7 @@ namespace FeelTheField
             var engine = Engine.Instance;
             engine.ConfigureGameFieldSize(row, col);
 
-            DrawConsole.FillWithChar(matrix, 'X');
+            PrintTheField.FillWithChar(matrix, 'X');
 
             UpdateMatrixAndPrintIt(engine, row, col, matrix, open, closed);
         }
@@ -65,7 +65,7 @@ namespace FeelTheField
                     }
                 }
 
-                DrawConsole.PrintField(matrix);
+                PrintTheField.PrintField(matrix);
 
                 
                 int y = int.Parse(Console.ReadLine());
