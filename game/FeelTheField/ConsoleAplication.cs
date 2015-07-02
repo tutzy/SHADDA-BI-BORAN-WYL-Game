@@ -31,10 +31,10 @@ namespace FeelTheField
 
             DrawConsole.FillWithChar(matrix, 'X');
 
-            UpdateMatixAndPrintIt(engine, row, col, matrix, open, closed);
+            UpdateMatrixAndPrintIt(engine, row, col, matrix, open, closed);
         }
 
-        private static void UpdateMatixAndPrintIt(Engine engine, int row, int col, char[,] matrix, char open, char closed)
+        private static void UpdateMatrixAndPrintIt(Engine engine, int row, int col, char[,] matrix, char open, char closed)
         {
 
             while (true)
